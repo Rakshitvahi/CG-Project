@@ -4,10 +4,8 @@
 #include<time.h>
 #include<string.h>
 
-int f=0;
-int a=200,b=0;
+int a=200;
 int i=0,state=0;
-float o1=1,o2=1;
 
 void typeText(char *string,float x,float y,float z,float w,float h,float sx,float sy,int width){
     int i;
@@ -127,3 +125,4 @@ int main(int argc, char **argv)
     //glEnable(GL_DEPTH_TEST);
     glutMainLoop();
 }
+
