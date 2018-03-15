@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<GL/glut.h>>
+#define SIZE 4
 
+int p[SIZE];
 static int flag=0;
+void delay(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock());
+}
+
 void typeText(char *string,float x,float y,float z,float w,float h,float sx,float sy,int width){
     int i;
 	glColor3f(x, y, z);
@@ -15,9 +23,20 @@ void typeText(char *string,float x,float y,float z,float w,float h,float sx,floa
 	{
              glutStrokeCharacter(GLUT_STROKE_ROMAN,string[i]);
 	}
-	glutSwapBuffers();
+	//glutSwapBuffers();
 	glPopMatrix();
 	glFlush();
+}
+void plotPoint(int x,int y,int s){
+    //glPushMatrix();
+    glPointSize(s);
+    glBegin(GL_POINTS);
+    glColor3f(1,0,1);
+    glPointSize(s);
+    glVertex2i(x,y);
+    glEnd();
+    glPointSize(1);
+
 }
 void rec(int x1,int y,int x2,int y2){
     glColor3f(1,0,0);
@@ -29,11 +48,86 @@ void rec(int x1,int y,int x2,int y2){
     glEnd();
 
 }
+void path(int k,int map[SIZE][2]) {
+	if(p[k] == -1 ) {
+		return;
+	}
+	path(p[k],map);
+
+	printf("%d ",k);
+    glVertex2f(map[k][0],map[k][1]);
+
+    delay(1000000);
+    glFlush();
+}
+void dijkstra(int adj[SIZE][SIZE],int n,int src,int map[SIZE][2]) {
+	int visit[SIZE];
+	int d[SIZE];
+	int i,j,k;
+	int min=0,w=0;
+	for(i=0;i<n;i++) {
+		visit[i]=0;
+		d[i]= 999;
+		p[i]= -1;
+	}
+	visit[src]=1;
+	d[src]=0;
+	p[src]=-1;
+	for(i=0;i<n;i++) {
+		if(adj[src][i] != 999 && adj[src][i] != 0) {
+			d[i]=adj[src][i];
+			p[i]=src;
+		}
+
+	}
+	for(i=1;i<n;i++) {
+		min = 999;
+		for(j=0;j<n;j++) {
+			if(visit[j]==0 && d[j] < min) {
+				min =d[j];
+				w=j;
+			}
+		}
+		visit[w]=1;
+		for(k=0;k<n;k++) {
+			if(visit[k]==0 && adj[w][k] != 999 && adj[w][k] != 0) {
+				if(d[k] > (d[w] + adj[w][k])) {
+					d[k]= d[w] + adj[w][k];
+					p[k]=w;
+				}
+			}
+		}
+	}
+	//for(i=0;i<n;i++) {
+		//printf("Distence of node %d from source is %d parent is %d\n",i,d[i],p[i]);
+		printf("path taken is");
+		printf("%d ",src);
+		glBegin(GL_LINE_STRIP);
+		glVertex2f(map[0][0],map[0][1]);
+		glFlush();
+		delay(1000000);
+
+		path(3,map);
+		glEnd();
+		printf("\n");
+	//}
+}
+
+void callDijkstra(int map[SIZE][2]){
+    int i,j;
+	int adj[SIZE][SIZE]={
+				{0,4,1,999},
+				{2,0,999,999},
+				{999,10,0,6},
+				{1,999,999,0}
+				};
+    dijkstra(adj,SIZE,0,map);
+}
 void keys(unsigned char key,int x,int y){
     if(key ==(char)13){
         printf("Hi");
         flag=1;
-        display();
+        //display();
         glutPostRedisplay();
 
     }
@@ -41,11 +135,20 @@ void keys(unsigned char key,int x,int y){
 }
 void screen2(){
     glClearColor(1,1,1,1);
+    int map[SIZE][2]={{100,100},{100,200},{200,200},{200,100}};
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     //printf("bye");
-
-    glutSwapBuffers();
+    plotPoint(map[0][0],map[0][1],5);
+    plotPoint(map[1][0],map[1][1],5);
+    plotPoint(map[2][0],map[2][1],5);
+    plotPoint(map[3][0],map[3][1],5);
+    //glutSwapBuffers();
     glFlush();
+    callDijkstra(map);
+    glFlush();
+    printf("bye");
+    //glutSwapBuffers();
+    //glFlush();
 }
 void display(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -70,9 +173,11 @@ void display(){
         glVertex2f(40,25);
         glVertex2f(45,35);
         glEnd();
-        glutSwapBuffers();
+        //glutSwapBuffers();
         glPopMatrix();
         glFlush();
+
+        //glLoadIdentity();
         len=(int) strlen(string);
         typeText(string,0.99, 0.75, 0.06,175,600,0.5,0.5,5);
         typeText("ENTER TO START",0.97, 0.22, 0.22,175,400,0.3,0.3,3);
@@ -86,10 +191,11 @@ void display(){
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB|GLUT_DEPTH);
 	glutInitWindowSize(700,700);
 	glutCreateWindow("Navigation");
     glutKeyboardFunc(keys);
+    glEnable(GL_POINT_SMOOTH);
 	glClearColor(0,0.4,0.52,1);
 	glOrtho(0,700,0,700,0,700);
 	glutDisplayFunc(display);
