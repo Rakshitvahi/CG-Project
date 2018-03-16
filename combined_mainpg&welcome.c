@@ -59,8 +59,11 @@ void path(int k,int map[SIZE][2]) {
 
 	printf("%d ",k);
     glVertex2f(map[k][0],map[k][1]);
-
+    glEnd();
+    glFinish();
+    glBegin(GL_LINES);
     delay(1000000);
+    glVertex2f(map[k][0],map[k][1]);
     glFlush();
 }
 void dijkstra(int adj[SIZE][SIZE],int n,int src,int map[SIZE][2]) {
@@ -105,7 +108,7 @@ void dijkstra(int adj[SIZE][SIZE],int n,int src,int map[SIZE][2]) {
 		//printf("Distence of node %d from source is %d parent is %d\n",i,d[i],p[i]);
 		printf("path taken is");
 		printf("%d ",src);
-		glBegin(GL_LINE_STRIP);
+		glBegin(GL_LINES);
 		glVertex2f(map[0][0],map[0][1]);
 		glFlush();
 		delay(1000000);
