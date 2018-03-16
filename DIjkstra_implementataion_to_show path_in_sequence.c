@@ -190,6 +190,10 @@ void callDijkstra(){
                 {999,999,999,999,999,999,9,999,999,0},
                 };
     drawRoad(adj);
+    printf("Enter source\n");
+    scanf("%d",&src);
+    printf("Enter the destination\n");
+    scanf("%d",&dst);
 
     dijkstra(adj,SIZE,src);
 }
@@ -214,10 +218,11 @@ void display(){
 
 int main(int argc, char *argv[])
 {
-    printf("Enter source\n");
+    /*printf("Enter source\n");
     scanf("%d",&src);
     printf("Enter the destination\n");
-    scanf("%d",&dst);
+    scanf("%d",&dst);*/
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB|GLUT_DEPTH);
 	glutInitWindowSize(1024,1000);
