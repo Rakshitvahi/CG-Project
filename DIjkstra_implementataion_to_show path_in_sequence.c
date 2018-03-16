@@ -82,7 +82,7 @@ void mark_points()
 void drawRoad(int adj[SIZE][SIZE])
 {
     int i,j;
-    glColor3f(1,1,1);
+    glColor3f(0,0,0);
 
     for(i=0;i<SIZE;i++)
         for(j=0;j<SIZE;j++)
@@ -97,46 +97,25 @@ void drawRoad(int adj[SIZE][SIZE])
                 glEnd();
             }
         }
+    glFlush();
     return;
 }
 
-//The following function is used to find the path from source to destination
-static int y=0;
-void path(int k){
+//The following function is used to find the path from source to destination and also draw the path
+void path(int k) {
 	if(p[k] == -1 ) {
-        t[y]=k;
-        y++;
-        return;
+		return;
 	}
 	path(p[k]);
-    //printf("%d ",k);
-    t[y]=k;
-    y++;
 
-}
-
-//The following function is used to draw the path found
-void drawPath()
-{
-    glPushMatrix();
-	glLineWidth(20);
-    int i;
-    glColor3f(1,0,0);
-    for(i=0;i<y-1;i++)
-    {
-        glBegin(GL_LINES);
-        glVertex2f(cod[t[i]][0],cod[t[i]][1]);
-        glVertex2f(cod[t[i+1]][0],cod[t[i+1]][1]);
-        delay(1000000);
-        glEnd();
-        glFlush();
-    }
-    glPopMatrix();
-	glFlush();
-    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-
-
+	printf("%d ",k);
+    glVertex2f(cod[k][0],cod[k][1]);
+    glEnd();
+    glFinish();
+    glBegin(GL_LINES);
+    delay(1000000);
+    glVertex2f(cod[k][0],cod[k][1]);
+    glFlush();
 }
 
 //Dijkstra
@@ -178,16 +157,21 @@ void dijkstra(int adj[SIZE][SIZE],int n,int src) {
 			}
 		}
 	}
+        delay(1000000);
 		printf("path taken is");
+		printf("%d ",src);
+		glPushMatrix();
+        glLineWidth(20);
+        glColor3f(1,0,0);
+		glBegin(GL_LINES);
+		glVertex2f(cod[src][0],cod[src][1]);
+		glFlush();
+		delay(1000000);
+
 		path(dst);
-
-		int q;
-
-		for(q=0;q<y;q++)
-            printf("%d ",t[q]);
-		printf("\n");
-		drawPath();
-
+		glEnd();
+		glPopMatrix();
+        printf("\n");
 }
 
 //The following function makes the adjacency matrix and calls draw road and dijkstra
@@ -206,6 +190,7 @@ void callDijkstra(){
                 {999,999,999,999,999,999,9,999,999,0},
                 };
     drawRoad(adj);
+
     dijkstra(adj,SIZE,src);
 }
 
@@ -223,7 +208,7 @@ void screen3(){
 //Display functions calls screen3()
 void display(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glClearColor(1,1,1,1);
+    glClearColor(0.8,0.8,1,1);
     screen3();
 }
 
@@ -247,3 +232,4 @@ int main(int argc, char *argv[])
 	glutMainLoop();
 	return 0;
 }
+
