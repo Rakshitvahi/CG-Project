@@ -6,15 +6,19 @@
 #define SIZE 10
 
 int cod[SIZE][2];//stores co-ordinates of the points
-int src,dst;
+int src,dst;//Source node and destination node
 int p[SIZE];
 static int flag=0;
+
+//The following function is used to give a delay
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
     while (goal > clock());
 }
 
+//The following function is used to display TEXT on the screen
+//Arguments are "STRING",R,G,B,X,Y,ScaleX,ScaleY,Width
 void typeText(char *string,float x,float y,float z,float w,float h,float sx,float sy,int width){
     int i;
 	glColor3f(x, y, z);
@@ -32,6 +36,9 @@ void typeText(char *string,float x,float y,float z,float w,float h,float sx,floa
 	glFlush();
 	//glLoadIdentity();//
 }
+
+//The following function is used to display a point on the screen
+//Arguments X,Y,SIZE
 void plotPoint(int x,int y,int s){
     //glPushMatrix();
     glPointSize(s);
@@ -43,6 +50,7 @@ void plotPoint(int x,int y,int s){
     glPointSize(1);
 
 }
+
 void rec(int x1,int y,int x2,int y2){
     glColor3f(1,0,0);
     glBegin(GL_LINE_LOOP);
@@ -92,8 +100,8 @@ void mark_points()
 void drawRoad(int adj[SIZE][SIZE])
 {
     int i,j;
-    glColor3f(0,0,0);
-
+    glColor3f(0.96,0.96,0.8);
+    glLineWidth(5);
     for(i=0;i<SIZE;i++)
         for(j=0;j<SIZE;j++)
         {
@@ -128,7 +136,7 @@ void path(int k) {
     glFlush();
 }
 
-//Dijkstra
+//Dijkstra implementation
 void dijkstra(int adj[SIZE][SIZE],int n,int src) {
 	int visit[SIZE];
 	int d[SIZE];
@@ -172,13 +180,12 @@ void dijkstra(int adj[SIZE][SIZE],int n,int src) {
 		printf("%d ",src);
 		glPushMatrix();
         glLineWidth(20);
-        glColor3f(1,0,0);
+        glColor3f(0,0,1);
 		glBegin(GL_LINES);
 		glVertex2f(cod[src][0],cod[src][1]);
 		glFlush();
 		delay(1000000);
-
-		path(dst);
+        path(dst);
 		glEnd();
 		glPopMatrix();
         printf("\n");
@@ -208,10 +215,11 @@ void callDijkstra(){
     dijkstra(adj,SIZE,src);
 }
 
-//The following function calls mark_points()
+//The following function calls mark_points() to make the initial map and then calls Dijkstra
 void screen3(){
+
+    glClearColor(0.65,0.93,0.31,1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.8,0.8,1,1);
     mark_points();
     glFlush();
     callDijkstra();
@@ -219,6 +227,7 @@ void screen3(){
     printf("bye");
 }
 
+//The following function is used to display the WELCOME text
 void welcomepg()
 {
     glClearColor(0.1,1,1,1.0);
@@ -241,16 +250,18 @@ void setpoly(int a)
     glEnd();
 }
 
+//The following function displays the loading page
 void loading()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glLineWidth(1);
+    typeText("Loading",1, 0, 0,300,355,0.2,0.2,2);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLineWidth(2);
     int i;
     float j=1;
     int a=310;
     for(i=0;i<10;i++)
     {
-
         glClearColor(j,1,1,1.0);
         j=j-0.1;
         glColor3f(0,0,0);
@@ -271,17 +282,12 @@ void loading()
 
 void keys(unsigned char key,int x,int y){
     if(key ==(char)13){
-        //printf("Hi");
-        //flag=1;
-        //display();
-        //glutPostRedisplay();
         loading();
     }
 
 }
 
-
-
+//The following function shows the initial page
 void screen1()
 {
     int len;
@@ -315,10 +321,10 @@ void screen1()
         typeText("RAHUL.J 1PE15CS115",0.75, 0.93, 0.96,10,130,0.2,0.2,3);
         typeText("RAKSHIT 1PE15CS119",0.75, 0.93, 0.96,10,80,0.2,0.2,3);
 }
+
 void display(){
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     screen1();
-
 }
 
 int main(int argc, char *argv[])
