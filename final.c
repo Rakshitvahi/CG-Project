@@ -12,6 +12,7 @@ int adj[SIZE][SIZE];
 float cod[SIZE][2];//stores co-ordinates of the points
 int src,dst;//Source node and destination node
 int p[SIZE];
+float mat[16];
 //static int flag=0;
 
 int id;
@@ -20,6 +21,14 @@ int view[3]={-3,93,3};
 float centre[3]={0,0,0.0};
 int up[3]={0.0,1.0,0.0};
 
+
+void printmat(){
+	int i=0;
+	for(i=0;i<16;i++)
+		printf("%f ",mat[i]);
+	printf("\n");
+
+}
 void keys(unsigned char key,int x,int y);
 void screen3();
 void myMenu(int val)
@@ -600,6 +609,7 @@ void entersrc()
 
 
 void screen33D(){
+    //glGetFloatv(GL_MODELVIEW_MATRIX, mat);
     glPushMatrix();
     glLoadIdentity();
     glClearColor(0.65,0.93,0.31,1);
@@ -642,7 +652,12 @@ void screen33D(){
 
 //The following function calls mark_points() to make the initial map and then calls Dijkstra
 void screen3(){
-
+	//glGetFloatv(GL_PROJECTION_MATRIX, mat);
+	printf("screen3\n");
+	printmat();
+	glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(mat); 
+	glMatrixMode(GL_MODELVIEW);
     /*glLoadIdentity();
     glClearColor(0.65,0.93,0.31,1);
     glOrtho(0,1,0,1,0,1);
@@ -680,11 +695,11 @@ void screen3(){
     else if(id==3)
     {
         glPushMatrix();
-	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_CONTINUE_EXECUTION);
-        int a = glutCreateWindow("3D");
+	//glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_CONTINUE_EXECUTION);
+        //int a = glutCreateWindow("3D");
 	
-	glutSetWindow(a);
-	glutKeyboardFunc(keys);
+	//glutSetWindow(a);
+	//glutKeyboardFunc(keys);
         screen33D();
         glPopMatrix();
 
@@ -712,6 +727,7 @@ void prescreen3()
     glutAddSubMenu("Options 3D",submenu2);
     glutAddMenuEntry("Exit",4);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glGetFloatv(GL_PROJECTION_MATRIX, mat);
 }
 
 void instruction()
