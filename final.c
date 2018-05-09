@@ -570,7 +570,7 @@ void callDijkstra3D(){
     drawbuild3D(0.925,0.8,0.990,0.8,0.990,0.990,0.925,0.990,0.1,0);
     drawbuild3D(0.925,0.910,0.925,0.990,0.810,0.990,0.810,0.910,0.1,0);
 
-    glColor3f(0.6, 0.6, 1.0);
+    /*glColor3f(0.6, 0.6, 1.0);
     glBegin(GL_POLYGON);
     glVertex3f(0.050,0,0.660);
     glVertex3f(0.645,0,0.660);
@@ -585,7 +585,7 @@ void callDijkstra3D(){
     glVertex3f(1,0,0.790);
     glVertex3f(0.8,0,0.790);
     glVertex3f(0.660,0,0.640);
-    glEnd();
+    glEnd();*/
     glFlush();
 }
 
@@ -796,18 +796,18 @@ void keys(unsigned char key,int x,int y){
 
 	else{
 	    switch(key){
-		case  'x': view[0]-=5;break;
-		case  'X': view[0]+=5;break;
-		case  'y': view[1]-=5;break;
-		case  'Y': view[1]+=5;break;
-		case  'z': view[2]-=5;break;
-		case  'Z': view[2]+=5;break;
-		case  'l': centre[0]-=.5;break;
-		case  'L': centre[0]+=.5;break;
-		case  'i': centre[1]-=.5;break;
-		case  'I': centre[1]+=.5;break;
-		case  'j': centre[2]-=.5;break;
-		case  'J': centre[2]+=.5;break;
+		case  'x': view[0]-=1;break;
+		case  'X': view[0]+=1;break;
+		case  'y': view[1]-=1;break;
+		case  'Y': view[1]+=1;break;
+		case  'z': view[2]-=1;break;
+		case  'Z': view[2]+=1;break;
+		case  'l': centre[0]-=.1;break;
+		case  'L': centre[0]+=.1;break;
+		case  'i': centre[1]-=.1;break;
+		case  'I': centre[1]+=.1;break;
+		case  'j': centre[2]-=.1;break;
+		case  'J': centre[2]+=.1;break;
 	    }
 	    screen33D();
 	}
