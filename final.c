@@ -8,6 +8,7 @@
 #include<GL/freeglut.h>
 #define SIZE 19
 
+int flag=0;
 int adj[SIZE][SIZE];
 float cod[SIZE][2];//stores co-ordinates of the points
 int src,dst;//Source node and destination node
@@ -600,11 +601,12 @@ void callDijkstra3D(){
 
 void entersrc()
 {
-	printf("Enter source\n");
+	flag=1;
+	/*printf("Enter source\n");
 	scanf("%d",&src);
 	printf("Enter the destination\n");
 	scanf("%d",&dst);
-	dijkstra(adj,SIZE,src);
+	dijkstra(adj,SIZE,src);*/
 }
 
 
@@ -814,7 +816,7 @@ void keys(unsigned char key,int x,int y){
 		switch(key){
 			case  'x': view[0]-=1;break;
 			case  'X': view[0]+=1;break;
-			case  'y': view[1]-=1;break;
+			case  'y': view[1]-=7;break;
 			case  'Y': view[1]+=1;break;
 			case  'z': view[2]-=1;break;
 			case  'Z': view[2]+=1;break;
@@ -903,7 +905,91 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	screen1();
 }
+void mouse(int btn,int state,int x,int y){
+	if(btn==GLUT_LEFT_BUTTON&&state==GLUT_DOWN){
+		float w,h,nx,ny;
+		int s=-1;
+		w =glutGet(GLUT_WINDOW_WIDTH);
+		h =glutGet(GLUT_WINDOW_HEIGHT); 
+		printf("mouse:x%d y:%d %f %f %f %f\n",x,y,w,h,(x/w),(1-y/h));
+		nx=x/w;
+		ny=1-y/h;
+		if(flag==1||flag==2){
+			if((nx<0.06)&&(nx>0.04)&&(ny<0.06)&&(ny>0.04)){
+				s=0;
+				printf("selected 0");
+			}else if((nx<0.36)&&(nx>0.34)&&(ny<0.06)&&(ny>0.04)){
+				s=11;				
+				printf("selected 11");
+			}else if((nx<0.06)&&(nx>0.04)&&(ny<0.66)&&(ny>0.64)){
+				s=1;				
+				printf("selected 1");
+			}else if((nx<0.66)&&(nx>0.64)&&(ny<0.66)&&(ny>0.64)){
+				s=2;
+				printf("selected 2");
+			}else if((nx<0.66)&&(nx>0.64)&&(ny<0.06)&&(ny>0.04)){
+				s=3;
+				printf("selected 3");
+			}else if((nx<0.66)&&(nx>0.64)&&(ny<0.56)&&(ny>0.54)){
+				s=4;
+				printf("selected 4");
+			}else if((nx<0.36)&&(nx>0.34)&&(ny<0.56)&&(ny>0.54)){
+				s=5;
+				printf("selected 5");
+			}else if((nx<0.21)&&(nx>0.19)&&(ny<0.66)&&(ny>0.64)){
+				s=6;
+				printf("selected 6");
+			}else if((nx<0.31)&&(nx>0.29)&&(ny<0.51)&&(ny>0.49)){
+				s=7;
+				printf("selected 7");
+			}else if((nx<0.31)&&(nx>0.29)&&(ny<0.26)&&(ny>0.24)){
+				s=8;
+				printf("selected 8");
+			}else if((nx<0.66)&&(nx>0.64)&&(ny<0.26)&&(ny>0.24)){
+				s=9;
+				printf("selected 9");
+			}else if((nx<0.36)&&(nx>0.34)&&(ny<0.26)&&(ny>0.24)){
+				s=10;
+				printf("selected 10");
+			}else if((nx<0.56)&&(nx>0.54)&&(ny<0.16)&&(ny>0.14)){
+				s=12;
+				printf("selected 12");
+			}else if((nx<0.36)&&(nx>0.34)&&(ny<0.16)&&(ny>0.14)){
+				s=13;
+				printf("selected 13");
+			}else if((nx<0.11)&&(nx>0.09)&&(ny<0.26)&&(ny>0.24)){
+				s=14;
+				printf("selected 14");
+			}else if((nx<0.16)&&(nx>0.14)&&(ny<0.51)&&(ny>0.49)){
+				s=15;
+				printf("selected 15");
+			}else if((nx<0.36)&&(nx>0.34)&&(ny<0.51)&&(ny>0.49)){
+				s=16;
+				printf("selected 16");
+			}else if((nx<0.385)&&(nx>0.365)&&(ny<0.585)&&(ny>0.565)){
+				s=17;
+				printf("selected 17");
+			}else if((nx<0.91)&&(nx>0.89)&&(ny<0.91)&&(ny>0.89)){
+				s=18;
+				printf("selected 18");
+			}
+			if(s!=-1)
+			{
+			if(flag==1){
+				src=s;
+				flag++;
+			}else{ 
+				if(flag==2){
+				dst=s;
+				flag=0;
+				dijkstra(adj,SIZE,src);
+				}
+			}
+			}
+		}
+	}
 
+}
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
@@ -911,6 +997,7 @@ int main(int argc, char *argv[])
 	glutInitWindowSize(1024,1000);
 	glutCreateWindow("Navigation");
 	glutKeyboardFunc(keys);
+	glutMouseFunc(mouse);
 	glEnable(GL_POINT_SMOOTH);
 	glClearColor(0,0.4,0.52,1);
 	glOrtho(0,700,0,700,0,700);
