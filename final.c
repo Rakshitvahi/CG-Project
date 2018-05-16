@@ -9,15 +9,13 @@
 #define SIZE 19
 
 int flag=0;
+int q=0;
 int adj[SIZE][SIZE];
 float cod[SIZE][2];//stores co-ordinates of the points
 int src,dst;//Source node and destination node
 int p[SIZE];
 float mat[16];
-//static int flag=0;
-
 int id;
-
 int view[3]={-3,93,3};
 float centre[3]={0,0,0.0};
 int up[3]={0.0,1.0,0.0};
@@ -32,6 +30,7 @@ void printmat(){
 }
 void keys(unsigned char key,int x,int y);
 void screen3();
+//Menu Callback Function
 void myMenu(int val)
 {
 	if(val==1) id=1;
@@ -47,12 +46,11 @@ void delay(unsigned int mseconds)
 	while (goal > clock());
 }
 
-//The following function is used to display TEXT on the screen
-//Arguments are "STRING",R,G,B,X,Y,ScaleX,ScaleY,Width
+/*The following function is used to display TEXT on the screen
+Arguments are "STRING",R,G,B,X,Y,ScaleX,ScaleY,Width*/
 void typeText(char *string,float x,float y,float z,float w,float h,float sx,float sy,float width){
 	int i;
 	glColor3f(x, y, z);
-	//glLoadIdentity();
 	glPushMatrix();
 	glTranslatef(w,h,0);
 	glScalef(sx,sy,1);
@@ -61,34 +59,27 @@ void typeText(char *string,float x,float y,float z,float w,float h,float sx,floa
 	{
 		glutStrokeCharacter(GLUT_STROKE_ROMAN,string[i]);
 	}
-	//glutSwapBuffers();
 	glPopMatrix();
 	glFlush();
-	//glLoadIdentity();//
 }
 
 void typeText2(char *string,float x,float y,float z,float w,float h,float sx,float sy,float width){
 	int i;
 	glColor3f(x, y, z);
-	//glLoadIdentity();
 	glPushMatrix();
 	glTranslatef(w,0,h);
-	//glRotatef(-90,0,1,0);
 	glScalef(sx,sy,1);
 	glLineWidth(width);
 	for (i = 0; string[i]; i++)
 	{
 		glutStrokeCharacter(GLUT_STROKE_ROMAN,string[i]);
 	}
-	//glutSwapBuffers();
 	glPopMatrix();
 	glFlush();
-	//glLoadIdentity();//
 }
 
-//The following function is used to display a point on the screen
-//Arguments X,Y,SIZE
-
+/*The following function is used to display a point on the screen 3D
+Arguments X,Y,SIZE*/
 void plotPoint3D(float x,float y,int s){
 	glPointSize(s);
 	glBegin(GL_POINTS);
@@ -97,11 +88,10 @@ void plotPoint3D(float x,float y,int s){
 	glVertex3f(x,0,y);
 	glEnd();
 	glPointSize(1);
-
 }
-
+/*The following function is used to display a point on the screen 2D
+Arguments X,Y,SIZE*/
 void plotPoint(float x,float y,int s){
-	//glPushMatrix();
 	glPointSize(s);
 	glBegin(GL_POINTS);
 	glColor3f(1,0,1);
@@ -112,6 +102,8 @@ void plotPoint(float x,float y,int s){
 
 }
 
+/*Draw a Polygon
+used for loading page*/
 void rec(int x1,int y,int x2,int y2){
 	glColor3f(1,0,0);
 	glBegin(GL_LINE_LOOP);
@@ -123,6 +115,8 @@ void rec(int x1,int y,int x2,int y2){
 
 }
 
+/*The following function stores the co-ordinates of each node in 'cod' 2D matrix
+plot the points and mark them on 3D*/
 void mark_points3D()
 {
 	int i;
@@ -176,7 +170,8 @@ void mark_points3D()
 
 }
 
-//The following function stores the co-ordinates of each node in 'cod' 2D matrix
+/*The following function stores the co-ordinates of each node in 'cod' 2D matrix
+plot the points and mark them on 2D*/
 void mark_points()
 {
 	int i;
@@ -227,7 +222,7 @@ void mark_points()
 	}
 }
 
-
+//The following function is use to draw the initial roads on 3D
 void drawRoad3D(int adj[SIZE][SIZE])
 {
 	int i,j;
@@ -253,7 +248,7 @@ void drawRoad3D(int adj[SIZE][SIZE])
 	return;
 }
 
-//The following function is use to draw the initial roads
+//The following function is use to draw the initial roads on 2D
 void drawRoad(int adj[SIZE][SIZE])
 {
 	int i,j;
@@ -336,13 +331,6 @@ void dijkstra(int adj[SIZE][SIZE],int n,int src) {
 	delay(1000000);
 	printf("path taken is");
 	printf("%d ",src);
-	//draw triangle
-	/*glColor3f(1, 1, 1);
-	  glPointSize(50);
-	  glBegin(GL_POINT);
-	  glVertex3f(cod[src][0],cod[src][1],0);
-	  glEnd();*/
-	//
 	glPushMatrix();
 	glLineWidth(20);
 	glColor3f(0,0,1);
@@ -386,9 +374,10 @@ void addImage2(float x1,float x4,float y1,float y4,float h) {
 	glDisable(GL_TEXTURE_2D);
 	glFlush();
 }
-//
+
 
 float colors[6][3] ={{0.96,0.63,0.59},{0.01,0.47,0.78},{0.96,0.73,0.59},{1,0.85,0.55},{0.15, 0.49, 0.42},{1,0.95,0.55}};
+//Draw building in 3D
 void drawbuild3D(float x1,float y1,float x2,float y2,float x3,float y3,float x4,float y4,float h,int c)
 {
 	//glColor3f(1,1,1);
@@ -435,7 +424,7 @@ void drawbuild3D(float x1,float y1,float x2,float y2,float x3,float y3,float x4,
 	glEnd();
 }
 
-
+//Draw Building in 2D
 void drawbuild(float x1,float y1,float x2,float y2,float x3,float y3,float x4,float y4)
 {
 	//glColor3f(1,1,1);
@@ -447,7 +436,8 @@ void drawbuild(float x1,float y1,float x2,float y2,float x3,float y3,float x4,fl
 	glVertex3f(x4,y4,0);
 	glEnd();
 }
-//The following function makes the adjacency matrix and calls draw road and dijkstra
+
+//The following function makes the adjacency matrix
 void callDijkstra(){
 	int i,j;
 	for(i=0;i<SIZE;i++)
@@ -580,33 +570,12 @@ void callDijkstra3D(){
 	drawbuild3D(0.925,0.8,0.990,0.8,0.990,0.990,0.925,0.990,0.1,0);
 	drawbuild3D(0.925,0.910,0.925,0.990,0.810,0.990,0.810,0.910,0.1,0);
 
-	/*glColor3f(0.6, 0.6, 1.0);
-	  glBegin(GL_POLYGON);
-	  glVertex3f(0.050,0,0.660);
-	  glVertex3f(0.645,0,0.660);
-	  glVertex3f(0.8,0,0.820);
-	  glVertex3f(0.8,0,1);
-	  glVertex3f(0.050,0,1);
-	  glEnd();
-	  glColor3f(0.6, 0.6, 1.0);
-	  glBegin(GL_POLYGON);
-	  glVertex3f(0.660,0,0.050);
-	  glVertex3f(1,0,0.050);
-	  glVertex3f(1,0,0.790);
-	  glVertex3f(0.8,0,0.790);
-	  glVertex3f(0.660,0,0.640);
-	  glEnd();*/
 	glFlush();
 }
 
 void entersrc()
 {
 	flag=1;
-	/*printf("Enter source\n");
-	scanf("%d",&src);
-	printf("Enter the destination\n");
-	scanf("%d",&dst);
-	dijkstra(adj,SIZE,src);*/
 }
 
 
@@ -736,14 +705,15 @@ void instruction()
 {
 	glClearColor(0.1,1,1,1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	typeText("INSTRUCTION",0.99,0.75,0.06,165,600,0.5,0.5,4);
-	typeText("1. Right click on the next screen to view the menu",0.99,0.75,0.06,20,500,0.15,0.15,2);
-	typeText("2. Click on src and dst to find path from source to destination",0.99,0.75,0.06,20,400,0.15,0.15,2);
-	typeText("3. Click on draw map to only view the map",0.99,0.75,0.06,20,300,0.15,0.15,2);
-	typeText("4. Click on 3D to enter 3D viewing mode to see the map in 3D",0.99,0.75,0.06,20,200,0.15,0.15,2);
-	typeText("5. Press c to continue...",0.99,0.75,0.06,20,100,0.15,0.15,2);
+	typeText("INSTRUCTION",0,0,0,165,600,0.5,0.5,4);
+	typeText("1. Right click on the next screen to view the menu",0.33,0.33,0.33,20,500,0.15,0.15,2);
+	typeText("2. Click on src and dst to find path from source to destination",0.33,0.33,0.33,20,450,0.15,0.15,2);
+	typeText("3. Click on the points to select source and destination",0.33,0.33,0.33,20,400,0.15,0.15,2);	
+	typeText("4. Click on draw map to only view the map",0.33,0.33,0.33,20,350,0.15,0.15,2);
+	typeText("5. Click on 3D to enter 3D viewing mode to see the map in 3D",0.33,0.33,0.33,20,300,0.15,0.15,2);
+	typeText("6. Use X,x,Y,y,Z,z to change the view",0.33,0.33,0.33,20,250,0.15,0.15,2);
+	typeText("7. Press Enter to continue...",0.33,0.33,0.33,20,200,0.15,0.15,2);
 
-	delay(3000000);
 	glFlush();
 
 }
@@ -803,10 +773,13 @@ void loading()
 
 void keys(unsigned char key,int x,int y){
 	if(key ==(char)13){
-		loading();
-	}
-	else if(key=='c'){
-		prescreen3();
+		if(q==0)
+		{
+			loading();
+			q=1;
+		}
+		else
+			prescreen3();
 	}
 	else if(key=='e'){
 		prescreen3();
@@ -893,8 +866,8 @@ void screen1()
 	len=(int) strlen(string);
 	typeText(string,0.99, 0.75, 0.06,175,600,0.5,0.5,5);
 	typeText("ENTER TO START",0.97, 0.22, 0.22,175,400,0.3,0.3,3);
-	typeText("RAHUL.J 1PE15CS115",0.75, 0.93, 0.96,10,130,0.2,0.2,3);
-	typeText("RAKSHIT 1PE15CS119",0.75, 0.93, 0.96,10,80,0.2,0.2,3);
+	typeText("RAHUL J    1PE15CS115",0.75, 0.93, 0.96,10,130,0.2,0.2,3);
+	typeText("RAKSHIT VAHI 1PE15CS119",0.75, 0.93, 0.96,10,80,0.2,0.2,3);
 	addImage();
 }
 
